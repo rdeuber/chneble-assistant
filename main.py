@@ -61,50 +61,6 @@ app.mount(
     name="static",
 )
 
-def search_results(
-    year: int,
-    rank: int | None = None,
-) -> list[dict]:
-    """Retrieve ranking records using exact Firestore filters."""
-
-    query = firestore_client.collection(
-        RESULTS_COLLECTION
-    ).where(
-        filter=FieldFilter("year", "==", year)
-    )
-
-    if rank is not None:
-        query = query.where(
-            filter=FieldFilter("rank", "==", rank)
-        )
-
-    results = []
-
-    for document in query.limit(100).stream():
-        data = document.to_dict()
-
-        results.append(
-            {
-                "year": data["year"],
-                "category": data["category"],
-                "rank": data.get("rank"),
-                "rank_label": data.get("rank_label"),
-                "row_text": data["row_text"],
-                "source_pdf": data["source_pdf"],
-            }
-        )
-
-    return sorted(
-        results,
-        key=lambda result: (
-            result["category"],
-            result["rank"]
-            if result["rank"] is not None
-            else 9999,
-        ),
-    )
-
-
 def create_query_embedding(text: str) -> list[float]:
     """Create an embedding optimized for retrieval queries."""
     response = genai_client.models.embed_content(
@@ -153,9 +109,6 @@ def retrieve_chunks(
         )
 
     return results
-
-
-RESULTS_COLLECTION = "results"
 
 
 def search_knowledge(query: str) -> list[dict]:
@@ -218,7 +171,7 @@ def search_results(
 
     results = []
 
-    for document in query.limit(200).stream():
+    for document in query.limit(100).stream():
         data = document.to_dict()
 
         results.append(
@@ -341,6 +294,12 @@ def health() -> dict:
 @app.post("/chat")
 def chat(request: ChatRequest) -> dict:
     question = request.message.strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=422,
+            detail="The message must not be empty.",
+        )
 
     try:
         response = genai_client.models.generate_content(
