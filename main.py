@@ -1,5 +1,8 @@
 import logging
 import os
+import json
+import time
+import uuid
 
 from fastapi import FastAPI, HTTPException
 from google import genai
@@ -60,6 +63,47 @@ app.mount(
     StaticFiles(directory=BASE_DIR / "static"),
     name="static",
 )
+
+def emit_log(
+    event: str,
+    severity: str = "INFO",
+    **fields,
+) -> None:
+    print(
+        json.dumps(
+            {
+                "severity": severity,
+                "message": event,
+                "event": event,
+                **fields,
+            },
+            ensure_ascii=False,
+            default=str,
+        ),
+        flush=True,
+    )
+
+def extract_tool_names(history) -> list[str]:
+    names: list[str] = []
+
+    for content in history or []:
+        for part in getattr(content, "parts", None) or []:
+            function_call = getattr(
+                part,
+                "function_call",
+                None,
+            )
+
+            name = getattr(
+                function_call,
+                "name",
+                None,
+            )
+
+            if name:
+                names.append(name)
+
+    return names
 
 def create_query_embedding(text: str) -> list[float]:
     """Create an embedding optimized for retrieval queries."""
@@ -301,6 +345,9 @@ def chat(request: ChatRequest) -> dict:
             detail="The message must not be empty.",
         )
 
+    request_id = uuid.uuid4().hex
+    start_time = time.perf_counter()
+
     try:
         response = genai_client.models.generate_content(
             model=GENERATION_MODEL,
@@ -361,12 +408,75 @@ def chat(request: ChatRequest) -> dict:
             ),
         )
 
-        logging.info(
-            "Automatic tool history: %s",
-            response.automatic_function_calling_history,
+        answer = (
+            response.text
+            or "No answer was generated."
         )
 
-    except Exception:
+        usage = response.usage_metadata
+
+        tool_names = extract_tool_names(
+            response.automatic_function_calling_history
+        )
+
+        emit_log(
+            "chat_completed",
+            request_id=request_id,
+            question=question,
+            answer=answer,
+            model=GENERATION_MODEL,
+            model_version=getattr(
+                response,
+                "model_version",
+                None,
+            ),
+            response_id=getattr(
+                response,
+                "response_id",
+                None,
+            ),
+            latency_ms=round(
+                (time.perf_counter() - start_time) * 1000
+            ),
+            tool_names=tool_names,
+            tool_call_count=len(tool_names),
+            question_characters=len(question),
+            answer_characters=len(answer),
+            prompt_tokens=getattr(
+                usage,
+                "prompt_token_count",
+                None,
+            ),
+            output_tokens=getattr(
+                usage,
+                "candidates_token_count",
+                None,
+            ),
+            tool_prompt_tokens=getattr(
+                usage,
+                "tool_use_prompt_token_count",
+                None,
+            ),
+            total_tokens=getattr(
+                usage,
+                "total_token_count",
+                None,
+            ),
+        )
+
+    except Exception as error:        
+        emit_log(
+            "chat_failed",
+            severity="ERROR",
+            request_id=request_id,
+            question=question,
+            latency_ms=round(
+                (time.perf_counter() - start_time) * 1000
+            ),
+            error_type=type(error).__name__,
+            error_message=str(error),
+        )
+
         logging.exception("Gemini tool request failed")
 
         raise HTTPException(
@@ -375,6 +485,7 @@ def chat(request: ChatRequest) -> dict:
         )
 
     return {
-        "answer": response.text or "No answer was generated.",
+        "answer": answer,
         "model": GENERATION_MODEL,
+        "request_id": request_id,
     }
