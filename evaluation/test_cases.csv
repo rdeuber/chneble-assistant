@@ -1,17 +1,61 @@
 id,category,question,expected_tool,must_contain_all,must_contain_any,must_not_contain,manual_check
-event_date,event_info,Wann findet die Chneblermeisterschaft statt?,search_knowledge,08.08.2026||08:30,,,
+event_date,event_info,Wann findet die Chneblermeisterschaft statt?,search_knowledge,2026||08:30,,,
 event_location,event_info,Wo findet die Chneblermeisterschaft statt?,search_knowledge,Schützenhaus||Schwyz,,,
-entry_fee,event_info,Wie hoch ist das Startgeld?,search_knowledge,CHF 20,,,
-payment,event_info,Wie kann ich bezahlen?,search_knowledge,Bargeld,,TWINT,
-registration_deadline,event_info,Bis wann können sich Gruppen anmelden?,search_knowledge,01.08.2026,,,
-lunch,event_info,Gibt es eine Mittagsverpflegung?,search_knowledge,organisiert||kostenpflichtig,,,
-beer_price,prices,Was kostet ein Cardinal Blonde?,search_knowledge,CHF 6,,,
-mineral_price,prices,Was kostet ein Mineral 3 dl?,search_knowledge,CHF 4,,,
-ranking_2015,history,Wer war 2015 bei den Männern im Finale auf Rang 1?,search_results,,Pflasterbuebä||Fredi Schürpf,,yes
-unrelated_weather,unsupported,Wie wird das Wetter am Samstag?,none,,keine Angaben||nicht verfügbar||weiss ich nicht,sonnig||Regen,
+entry_fee,event_info,Wie hoch ist das Startgeld für eine Gruppe?,search_knowledge,20,,,
+payment,event_info,Wie kann ich am Anlass bezahlen?,search_knowledge,Bargeld,,TWINT,
+group_registration_status,event_info,Kann ich meine Gruppe noch für die Chneblermeisterschaft anmelden?,search_knowledge,,geschlossen||nicht mehr,,yes
+individual_registration,event_info,Muss ich mich für den Einzelwettkampf im Voraus anmelden?,search_knowledge,,nein||vor Ort||keine Anmeldung,,yes
+individual_time,event_info,Wann findet der Einzelwettkampf statt?,search_knowledge,13:00||15:00,,,
+registration_deadline,event_info,Bis wann konnten sich Gruppen anmelden?,search_knowledge,01.08.2026,,,
+finals_time,event_info,Wann beginnen die Finalspiele und die Rangverkündigung?,search_knowledge,15:00,,,
+lunch,event_info,Gibt es eine Mittagsverpflegung und ist sie im Startgeld inbegriffen?,search_knowledge,kostenpflichtig,,,
+mineral_small_price,prices,Was kostet ein Mineral 3 dl?,search_knowledge,4,,,
+mineral_large_price,prices,Was kostet eine 1.5-Liter-Flasche Coca-Cola?,search_knowledge,12,,,
+cardinal_special_price,prices,Wie viel kostet ein Cardinal Spezial?,search_knowledge,5,,,
+cardinal_blonde_price,prices,Was kostet ein Cardinal Blonde?,search_knowledge,6,,,
+alcohol_free_cider_price,prices,Wie teuer ist ein alkoholfreier Moscht?,search_knowledge,6,,,
+coffee_price,prices,Was kostet ein Kaffee Crème?,search_knowledge,3,,,
+coffee_schnapps_price,prices,Wie viel kostet ein Kaffee Träscht?,search_knowledge,5,,,
+smirnoff_price,prices,Was kostet ein Smirnoff?,search_knowledge,7,,,
+nussgipfel_price,prices,Wie teuer ist ein Nussgipfel?,search_knowledge,3,,,
+sandwich_price,prices,Was kostet ein Schinken- oder Salami-Sandwich?,search_knowledge,5,,,
+co_main_sponsors,sponsors,Wer sind die Co-Hauptsponsoren 2026?,search_knowledge,Urmiimmo AG||AXA Seewen - Adrian Imhof,,,
+place_sponsor,sponsors,Nenne einen Platzsponsor der Chneblermeisterschaft 2026.,search_knowledge,,Victorinox AG||Küttel Getränke AG||Convisa AG||Sparkasse Schwyz AG,,yes
+patron_sponsor,sponsors,Nenne einen Gönner der Chneblermeisterschaft 2026.,search_knowledge,,Beck Roman AG||Gasser Elektro AG||Stoos||Rigi,,yes
+rule_team_size,rules,Aus wie vielen Mitgliedern besteht eine Gruppe?,search_knowledge,drei,,,
+rule_starting_points,rules,Mit wie vielen Punkten startet jedes Gruppenmitglied?,search_knowledge,10,,,
+rule_playing_field,rules,Welchen Durchmesser hat der Spielkreis?,search_knowledge,4 m,,,
+rule_round_duration,rules,Wie lange dauert eine Spielrunde?,search_knowledge,13 Minuten,,,
+rule_stick_dimensions,rules,Welche Masse hat ein Wettkampf-Chnebel?,search_knowledge,25 mm||30°||50||55,,,
+rule_colors,rules,Welche beiden Farben werden im Wettkampf verwendet?,search_knowledge,Rot||Schwarz,,,
+rule_first_team,rules,Welche Farbe beginnt das Spiel?,search_knowledge,Rot,,Schwarz beginnt,
+rule_touch_opponent,rules,Was passiert beim Berühren oder Wackeln eines gegnerischen Chnebels?,search_knowledge,Runde,aussetzen||auslassen,,
+rule_broken_stick,rules,Was geschieht bei einem Chnebelbruch?,search_knowledge,Schiedsrichter||keine Wertung,,,
+rule_outside_circle,rules,Was passiert mit einem Chnebel ausserhalb des Spielkreises?,search_knowledge,Schiedsrichter||zurück,,,
+rule_indirect_hit,rules,Sind indirekte Treffer gültig?,search_knowledge,ungültig,,,
+rule_own_stick,rules,Was passiert wenn jemand den Chnebel der eigenen Gruppe trifft?,search_knowledge,Leben||abgezogen||erneut,,,
+rule_tie_break,rules,Wie wird ein Unentschieden in der K.-o.-Phase entschieden?,search_knowledge,Chnebel||Kreismitte||abwechselnd,,yes
+rule_scoring,rules,Wie viele Tabellenpunkte gibt es für Sieg Unentschieden und Niederlage?,search_knowledge,2||1||0,,,
+rule_tied_table,rules,Wie wird bei gleicher Punktezahl nach der Vorrunde entschieden?,search_knowledge,Direktbegegnung||5 Minuten||5 Punkte,,yes
+ranking_2015_men,history,Wer war 2015 bei den Männern im Finale auf Rang 1?,search_results,Pflasterbuebä||Fredi Schürpf,,,
+ranking_2016_individual,history,Wer gewann 2016 die Einzelmeisterschaft?,search_results,Paul Reichmuth||29,,,
+ranking_2017_mixed,history,Welches Mixed-Team gewann 2017?,search_results,99 Prozent||Mario Beffa||Karin Steiner||Roger Betschart,,,
+ranking_2018_individual,history,Wer belegte 2018 in der Einzelmeisterschaft Rang 1?,search_results,Toni Wälti,,,
+ranking_2019_men,history,Welches Männerteam gewann 2019?,search_results,Holzboden||Samuel Arnold||Stefan Herger||Alex Herger,,,
+ranking_2020_individual_second,history,Wer wurde 2020 Zweiter in der Einzelmeisterschaft?,search_results,Mario Beffa||21,,,
+ranking_2021_men,history,Wer gewann 2021 bei den Männern?,search_results,Viva Chneblä||Erich Steiner||Bruno Schürpf||Benno Schürpf,,,
+ranking_2022_mixed,history,Welches Mixed-Team belegte 2022 Rang 1?,search_results,Dr Mänu isch tschuwd||Manuel Arnold||Nadine Herger||Dario Herger,,,
+ranking_2023_individual,history,Wer gewann 2023 die Einzelmeisterschaft?,search_results,Renzo Arnold||29,,,
+ranking_2024_mixed,history,Wer gewann 2024 in der Kategorie Mixed?,search_results,Hawk Tuah||Urs Steiner||Karin Steiner||Rico Gwerder,,,
+ranking_2025_individual,history,Wer gewann 2025 die Einzelmeisterschaft?,search_results,Manuel Kälin||17,,,
+ranking_multiple_categories,history,Wer belegte 2020 Rang 1?,search_results,Maisfäscht Schwyz||Trio vum Holzbodä||Marcel Ulrich,,,yes
+live_current,live,Gibt es bereits eine aktuelle Zwischenrangliste?,get_live_ranking,,,,yes
+live_individual_position,live,Auf welchem Rang liegt aktuell das Team Holzboden?,get_live_ranking,,PDF||Zwischenrangliste,,yes
+unsupported_weather,unsupported,Wie wird das Wetter am Samstag?,none,,keine Angaben||nicht verfügbar||weiss ich nicht,sonnig||Regen,yes
 unsupported_parking,unsupported,Gibt es Parkplätze beim Schützenhaus?,search_knowledge,,keine Angaben||nicht bekannt||nicht verfügbar,,yes
-unsupported_twint,unsupported,Kann ich mit TWINT bezahlen?,search_knowledge,Bargeld,,Ja||TWINT wird akzeptiert,
-general_knowledge,unsupported,Was ist die Hauptstadt von Frankreich?,none,,nicht beantworten||keine Veranstaltungsinformation,Paris,
-typo,event_info,Wan und wo isch d Chneblemeisterschaft?,search_knowledge,08.08.2026||Schützenhaus,,,
+unsupported_twint,unsupported,Kann ich mit TWINT bezahlen?,search_knowledge,Bargeld,,TWINT wird akzeptiert||Ja,
+unsupported_children,unsupported,Gibt es eine Kinderbetreuung am Anlass?,search_knowledge,,keine Angaben||nicht bekannt||nicht verfügbar,,yes
+general_knowledge,unsupported,Was ist die Hauptstadt von Frankreich?,none,,nicht beantworten||keine Veranstaltungsinformation,Paris,yes
+typo_dialect,event_info,Wan und wo isch d Chneblemeisterschaft?,search_knowledge,2026||Schützenhaus,,,
+english_language,language,Where does the Chneblä competition take place?,search_knowledge,Schützenhaus||Schwyz,,,yes
 swiss_standard_german,language,Wo befindet sich die Strasse zum Anlass?,search_knowledge,,,Straße,yes
-live_unpublished,live,Gibt es schon eine Zwischenrangliste?,get_live_ranking,,noch keine||nicht veröffentlicht,,yes
