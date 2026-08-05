@@ -1,0 +1,4 @@
+fastapi[standard]
+google-genai
+google-cloud-firestore
+pypdf

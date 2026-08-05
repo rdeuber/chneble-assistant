@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Chneble-Assistent</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #eeeeec;
+      color: #202020;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 48px);
+      background: #ffffff;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    header {
+      padding: 20px 24px;
+      background: #ffffff;
+      color: #202020;
+      border-bottom: 1px solid #d8d8d5;
+    }
+
+    .brand-logo {
+      width: 74px;
+      height: 74px;
+      object-fit: contain;
+    }
+
+    header h1 {
+      margin: 0 0 5px;
+      font-size: 1.45rem;
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      margin: 0;
+      color: #686868;
+      font-size: 0.92rem;
+    }
+
+    .suggestion {
+      flex: 0 0 auto;
+      border: 1px solid #282828;
+      background: #ffffff;
+      color: #202020;
+      border-radius: 3px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.84rem;
+    }
+
+
+    .suggestion {
+      flex: 0 0 auto;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.84rem;
+    }
+
+    .suggestion:hover {
+      background: #202020;
+      color: #ffffff;
+    }
+
+    #messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 15px;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 11px 14px;
+      border-radius: 15px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .assistant .bubble {
+      background: #eef2ef;
+      border-bottom-left-radius: 4px;
+    }
+
+    .user .bubble {
+      background: #202020;
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .status {
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .error .bubble {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      padding: 16px;
+      border-top: 1px solid #e5e7eb;
+      background: white;
+    }
+
+    textarea {
+      flex: 1;
+      min-height: 46px;
+      max-height: 130px;
+      resize: none;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      font: inherit;
+    }
+
+    textarea:focus {
+      outline: 2px solid #707070;
+      border-color: transparent;
+    }
+
+    button[type="submit"] {
+      border: 0;
+      border-radius: 3px;
+      padding: 0 19px;
+      background: #202020;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    footer {
+      padding: 0 18px 14px;
+      color: #6b7280;
+      font-size: 0.76rem;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 0;
+      }
+
+      .app {
+        min-height: 100vh;
+        border-radius: 0;
+      }
+
+      .bubble {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <main class="app">
+      <header>
+        <div class="brand">
+          <img
+            class="brand-logo"
+            src="/static/logo.png"
+            alt="Chneble Schwyz"
+          >
+
+          <div>
+            <h1>Chneble-Assistent</h1>
+            <p>
+              Fragen zur Chneblermeisterschaft Schwyz
+            </p>
+          </div>
+        </div>
+      </header>
+      <section
+        class="suggestions"
+        aria-label="Beispielfragen"
+      >
+        <button
+          class="suggestion"
+          type="button"
+          data-question="Wann findet die Chneblermeisterschaft statt?"
+        >
+          Datum und Zeit
+        </button>
+
+        <button
+          class="suggestion"
+          type="button"
+          data-question="Was kostet ein Cardinal Blonde?"
+        >
+          Getränkepreise
+        </button>
+
+        <button
+          class="suggestion"
+          type="button"
+          data-question="Was passiert bei Punktgleichheit?"
+        >
+          Reglement
+        </button>
+
+        <button
+          class="suggestion"
+          type="button"
+          data-question="Wer gewann 2017 bei den Männern?"
+        >
+          Ranglisten
+        </button>
+      </section>
+
+      <section
+        id="messages"
+        aria-live="polite"
+      >
+        <div class="message assistant">
+          <div class="bubble">
+            Hoi! Was möchtest du über die Chneblermeisterschaft wissen?
+          </div>
+        </div>
+      </section>
+
+      <form id="chat-form">
+        <textarea
+          id="message-input"
+          maxlength="500"
+          placeholder="Frage eingeben …"
+          aria-label="Nachricht"
+          required
+        ></textarea>
+
+        <button
+          id="send-button"
+          type="submit"
+        >
+          Senden
+        </button>
+      </form>
+
+      <footer>
+        Antworten werden anhand der hinterlegten Veranstaltungsdaten erstellt.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("message-input");
+    const sendButton = document.getElementById("send-button");
+    const messages = document.getElementById("messages");
+
+    function addMessage(text, role, extraClass = "") {
+      const wrapper = document.createElement("div");
+      wrapper.className = `message ${role} ${extraClass}`.trim();
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      wrapper.appendChild(bubble);
+      messages.appendChild(wrapper);
+      messages.scrollTop = messages.scrollHeight;
+
+      return wrapper;
+    }
+
+    async function sendMessage(question) {
+      const cleanedQuestion = question.trim();
+
+      if (!cleanedQuestion) {
+        return;
+      }
+
+      addMessage(cleanedQuestion, "user");
+      input.value = "";
+      sendButton.disabled = true;
+      input.disabled = true;
+
+      const loadingMessage = addMessage(
+        "Antwort wird gesucht …",
+        "assistant",
+        "status"
+      );
+
+      try {
+        const response = await fetch("/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: cleanedQuestion
+          })
+        });
+
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          data = {};
+        }
+
+        loadingMessage.remove();
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail || `HTTP-Fehler ${response.status}`
+          );
+        }
+
+        addMessage(
+          data.answer || "Es wurde keine Antwort erzeugt.",
+          "assistant"
+        );
+      } catch (error) {
+        loadingMessage.remove();
+
+        addMessage(
+          `Die Anfrage ist fehlgeschlagen: ${error.message}`,
+          "assistant",
+          "error"
+        );
+      } finally {
+        sendButton.disabled = false;
+        input.disabled = false;
+        input.focus();
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      await sendMessage(input.value);
+    });
+
+    input.addEventListener("keydown", async (event) => {
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+
+        if (!sendButton.disabled) {
+          await sendMessage(input.value);
+        }
+      }
+    });
+
+    document
+      .querySelectorAll(".suggestion")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          await sendMessage(button.dataset.question);
+        });
+      });
+  </script>
+</body>
+</html>
