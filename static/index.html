@@ -6,21 +6,37 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-  <title>Chneble-Assistent</title>
+  <title>Chneblä Schwyz</title>
+  <link rel="preconnect" href="https://fonts.jimstatic.com">
+  <link
+    rel="stylesheet"
+    href="https://fonts.jimstatic.com/css?family=Exo+2:200,300,400,700|Open+Sans:300,400,700&amp;subset=latin,latin-ext"
+  >
 
   <style>
     * {
       box-sizing: border-box;
     }
 
+    button,
+    textarea {
+      font-family: inherit;
+    }
+
     body {
       margin: 0;
       font-family:
-        -apple-system,
-        BlinkMacSystemFont,
+        "Exo 2",
         "Segoe UI",
         sans-serif;
-      background: #eeeeec;
+      font-weight: 300;
+      background-color: #385f30;
+      background-image:
+        url("./static/background.jpg"),
+        url("background.jpg");
+      background-position: center;
+      background-size: cover;
+      background-attachment: fixed;
       color: #202020;
     }
 
@@ -37,27 +53,39 @@
       display: flex;
       flex-direction: column;
       min-height: calc(100vh - 48px);
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.84);
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
     }
 
     header {
+      position: relative;
       padding: 20px 24px;
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.34);
       color: #202020;
       border-bottom: 1px solid #d8d8d5;
     }
 
+    .brand {
+      padding-right: 62px;
+    }
+
     .brand-logo {
-      width: 74px;
-      height: 74px;
+      position: absolute;
+      top: 14px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
     }
 
     header h1 {
       margin: 0 0 5px;
+      font-family: "Open Sans", "Segoe UI", sans-serif;
+      font-weight: 300;
       font-size: 1.45rem;
       letter-spacing: 0.02em;
     }
@@ -68,26 +96,29 @@
       font-size: 0.92rem;
     }
 
-    .suggestion {
-      flex: 0 0 auto;
-      border: 1px solid #282828;
-      background: #ffffff;
-      color: #202020;
-      border-radius: 3px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 0.84rem;
+    .suggestions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 8px;
+      padding: 16px 20px 0;
     }
 
-
     .suggestion {
-      flex: 0 0 auto;
+      flex: 1 1 145px;
       border: 1px solid #d1d5db;
       background: white;
+      color: #202020;
       border-radius: 999px;
       padding: 8px 12px;
       cursor: pointer;
       font-size: 0.84rem;
+      text-align: center;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
     }
 
     .suggestion:hover {
@@ -146,7 +177,7 @@
       gap: 10px;
       padding: 16px;
       border-top: 1px solid #e5e7eb;
-      background: white;
+      background: rgba(255, 255, 255, 0.34);
     }
 
     textarea {
@@ -209,18 +240,20 @@
     <main class="app">
       <header>
         <div class="brand">
-          <img
-            class="brand-logo"
-            src="/static/logo.png"
-            alt="Chneble Schwyz"
-          >
-
           <div>
-            <h1>Chneble-Assistent</h1>
+            <h1>Chneblä Schwyz</h1>
             <p>
-              Fragen zur Chneblermeisterschaft Schwyz
+              Fragen zur Chneblermeisterschaft
             </p>
           </div>
+
+          <img
+            class="brand-logo"
+            src="./static/logo-black.png"
+            alt=""
+            aria-hidden="true"
+            onerror="this.onerror=null; this.src='logo-black.png';"
+          >
         </div>
       </header>
       <section
@@ -265,9 +298,7 @@
         aria-live="polite"
       >
         <div class="message assistant">
-          <div class="bubble">
-            Hoi! Was möchtest du über die Chneblermeisterschaft wissen?
-          </div>
+          <div class="bubble">Hoi! Was möchtest du über die Chneblermeisterschaft wissen?</div>
         </div>
       </section>
 
@@ -289,7 +320,7 @@
       </form>
 
       <footer>
-        Antworten werden anhand der hinterlegten Veranstaltungsdaten erstellt.
+        Der Chatbot kann Fehler machen. Alle Angaben ohne Gewähr.
       </footer>
     </main>
   </div>
