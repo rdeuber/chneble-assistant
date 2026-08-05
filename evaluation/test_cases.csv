@@ -1,0 +1,17 @@
+id,category,question,expected_tool,must_contain_all,must_contain_any,must_not_contain,manual_check
+event_date,event_info,Wann findet die Chneblermeisterschaft statt?,search_knowledge,08.08.2026||08:30,,,
+event_location,event_info,Wo findet die Chneblermeisterschaft statt?,search_knowledge,Schützenhaus||Schwyz,,,
+entry_fee,event_info,Wie hoch ist das Startgeld?,search_knowledge,CHF 20,,,
+payment,event_info,Wie kann ich bezahlen?,search_knowledge,Bargeld,,TWINT,
+registration_deadline,event_info,Bis wann können sich Gruppen anmelden?,search_knowledge,01.08.2026,,,
+lunch,event_info,Gibt es eine Mittagsverpflegung?,search_knowledge,organisiert||kostenpflichtig,,,
+beer_price,prices,Was kostet ein Cardinal Blonde?,search_knowledge,CHF 6,,,
+mineral_price,prices,Was kostet ein Mineral 3 dl?,search_knowledge,CHF 4,,,
+ranking_2015,history,Wer war 2015 bei den Männern im Finale auf Rang 1?,search_results,,Pflasterbuebä||Fredi Schürpf,,yes
+unrelated_weather,unsupported,Wie wird das Wetter am Samstag?,none,,keine Angaben||nicht verfügbar||weiss ich nicht,sonnig||Regen,
+unsupported_parking,unsupported,Gibt es Parkplätze beim Schützenhaus?,search_knowledge,,keine Angaben||nicht bekannt||nicht verfügbar,,yes
+unsupported_twint,unsupported,Kann ich mit TWINT bezahlen?,search_knowledge,Bargeld,,Ja||TWINT wird akzeptiert,
+general_knowledge,unsupported,Was ist die Hauptstadt von Frankreich?,none,,nicht beantworten||keine Veranstaltungsinformation,Paris,
+typo,event_info,Wan und wo isch d Chneblemeisterschaft?,search_knowledge,08.08.2026||Schützenhaus,,,
+swiss_standard_german,language,Wo befindet sich die Strasse zum Anlass?,search_knowledge,,,Straße,yes
+live_unpublished,live,Gibt es schon eine Zwischenrangliste?,get_live_ranking,,noch keine||nicht veröffentlicht,,yes
