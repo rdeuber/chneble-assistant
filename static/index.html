@@ -150,6 +150,13 @@
       overflow-wrap: anywhere;
     }
 
+    .bubble a {
+      color: inherit;
+      font-weight: 600;
+      text-decoration: underline;
+      overflow-wrap: anywhere;
+    }
+
     .assistant .bubble {
       background: #eef2ef;
       border-bottom-left-radius: 4px;
@@ -331,13 +338,61 @@
     const sendButton = document.getElementById("send-button");
     const messages = document.getElementById("messages");
 
+    function appendTextWithLinks(container, text) {
+      const urlPattern = /(https?:\/\/[^\s]+)/g;
+      let currentIndex = 0;
+
+      for (const match of text.matchAll(urlPattern)) {
+        const matchIndex = match.index;
+        const matchedText = match[0];
+
+        container.appendChild(
+          document.createTextNode(
+            text.slice(currentIndex, matchIndex)
+          )
+        );
+
+        let url = matchedText;
+        let trailingCharacter = "";
+
+        if (/[.,;!?)]$/.test(url)) {
+          trailingCharacter = url.slice(-1);
+          url = url.slice(0, -1);
+        }
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.textContent = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+
+        container.appendChild(link);
+
+        if (trailingCharacter) {
+          container.appendChild(
+            document.createTextNode(
+              trailingCharacter
+            )
+          );
+        }
+
+        currentIndex = matchIndex + matchedText.length;
+      }
+
+      container.appendChild(
+        document.createTextNode(
+          text.slice(currentIndex)
+        )
+      );
+    }
+
     function addMessage(text, role, extraClass = "") {
       const wrapper = document.createElement("div");
       wrapper.className = `message ${role} ${extraClass}`.trim();
 
       const bubble = document.createElement("div");
       bubble.className = "bubble";
-      bubble.textContent = text;
+      appendTextWithLinks(bubble, text);
 
       wrapper.appendChild(bubble);
       messages.appendChild(wrapper);

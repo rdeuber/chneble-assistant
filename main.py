@@ -15,6 +15,8 @@ from pathlib import Path
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from zoneinfo import ZoneInfo
+
 
 app = FastAPI(
     title="Chneble Assistant",
@@ -30,6 +32,9 @@ EMBEDDING_MODEL = "gemini-embedding-001"
 EMBEDDING_DIMENSION = 768
 COLLECTION_NAME = "knowledge_chunks"
 RETRIEVAL_LIMIT = 4
+LIVE_RANKING_COLLECTION = "live_ranking"
+LIVE_RANKING_DOCUMENT = "current"
+ZURICH_TIMEZONE = ZoneInfo("Europe/Zurich")
 
 BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_FILE = BASE_DIR / "static" / "index.html"
@@ -229,6 +234,57 @@ def search_results(
 
     return results
 
+def get_live_ranking() -> dict:
+    """Return the latest published Zwischenrangliste.
+
+    Use this tool for questions about today's current or
+    intermediate ranking. Do not use historical ranking data
+    for these questions.
+
+    Returns:
+        Publication status, publication time and PDF URL.
+    """
+    document = (
+        firestore_client
+        .collection(LIVE_RANKING_COLLECTION)
+        .document(LIVE_RANKING_DOCUMENT)
+        .get()
+    )
+
+    if not document.exists:
+        return {
+            "status": "not_published",
+        }
+
+    data = document.to_dict() or {}
+
+    if (
+        not data.get("published")
+        or not data.get("pdf_url")
+    ):
+        return {
+            "status": "not_published",
+        }
+
+    published_at = data.get("published_at")
+    published_at_text = None
+
+    if published_at is not None:
+        published_at_text = (
+            published_at
+            .astimezone(ZURICH_TIMEZONE)
+            .strftime("%d.%m.%Y um %H:%M Uhr")
+        )
+
+    return {
+        "status": "published",
+        "published_at": published_at_text,
+        "pdf_url": data["pdf_url"],
+        "source_filename": data.get(
+            "source_filename"
+        ),
+    }
+
 
 def build_context(chunks: list[dict]) -> str:
     sections: list[str] = []
@@ -263,6 +319,10 @@ def get_results(
         "count": len(results),
         "results": results,
     }
+
+@app.get("/live-ranking")
+def live_ranking_status() -> dict:
+    return get_live_ranking()
 
 
 @app.get("/", include_in_schema=False)
@@ -306,8 +366,21 @@ def chat(request: ChatRequest) -> dict:
                     "participant names and scores. Reproduce these values "
                     "conservatively and do not guess how they are separated. "
 
+                    "For any question about today's, the current, or an intermediate "
+                    "ranking, always use the get_live_ranking tool. Do not use the "
+                    "historical search_results tool for these questions. "
+
+                    "If get_live_ranking returns status='not_published', clearly say "
+                    "that no Zwischenrangliste has been published yet. "
+
+                    "If it returns status='published', mention the publication time "
+                    "and include the exact pdf_url as plain text. Do not format the "
+                    "URL as Markdown. "
+
+                    "Do not infer individual positions from the live PDF. Direct the "
+                    "user to the official PDF instead. "
+
                     "If several categories match, clearly distinguish them. "
-                    "Mention the relevant source file or page. "
                     "Answer in the same language as the user. "
                     "Keep the answer concise."
 
@@ -317,6 +390,7 @@ def chat(request: ChatRequest) -> dict:
                 tools=[
                     search_knowledge,
                     search_results,
+                    get_live_ranking,
                 ],
                 automatic_function_calling=(
                     types.AutomaticFunctionCallingConfig(
